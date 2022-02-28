@@ -40,11 +40,11 @@ async function callFlowsEvent(browserId: string) {
   const cdpSegmentsResponseJson = await rawResponse.json();
   console.log("CDP Response:", cdpSegmentsResponseJson.audienceFilter);
   if(cdpSegmentsResponseJson.audienceFilter == 'personalized') {
-    NextResponse.redirect("/personalized")
+    NextResponse.redirect("sugcon-2022-cyan.vercel.app/personalized")
   }
   else
   {
-    NextResponse.redirect("/homie")
+    NextResponse.redirect("sugcon-2022-cyan.vercel.app/homie")
   }
 }
 
