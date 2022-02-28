@@ -5,19 +5,25 @@ export async function middleware(request: NextRequest) {
   const cookieKey = `bid_${process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY}`;
   const browserId = request.cookies[cookieKey];
   console.log("BrowserId: " + browserId);
-  if(browserId == '' || undefined) {
+  if (browserId == '' || undefined) {
     return;
   }
   let callFlowResponse = await callFlowsEvent(browserId);
 
   console.log("url: ", request.url)
 
-  if(request.url.includes('/home')) {
-    if(callFlowResponse.audienceFilter == 'personalized') {
-      NextResponse.redirect('/home-personalized')
+  if (request.url.includes('/home')) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dest'
+
+
+    if (callFlowResponse.audienceFilter == 'personalized') {
+      url.pathname = '/home-personalized'
+
+      NextResponse.redirect(url)
     }
-    else
-    {
+    else {
+      url.pathname = '/home'
       NextResponse.redirect('/home')
     }
   }
@@ -28,7 +34,7 @@ export async function middleware(request: NextRequest) {
 
 async function callFlowsEvent(browserId: string) {
   const boxeverCallFlowsEndpoint = "https://api.boxever.com/v2/callFlows"
-  
+
   const payload = {
     "channel": "WEB",
     "language": "en",
@@ -36,8 +42,8 @@ async function callFlowsEvent(browserId: string) {
     "pointOfSale": "eupos",
     "browserId": browserId,
     "clientKey": process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY,
-    "friendlyId":"page_view_personalization"
-}
+    "friendlyId": "page_view_personalization"
+  }
 
   const rawResponse = await fetch(boxeverCallFlowsEndpoint, {
     method: 'POST',
