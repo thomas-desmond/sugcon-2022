@@ -9,6 +9,7 @@ declare const Boxever: any;
 function createPageView(routeName: string) {
   const pos = 'spintel.com';
 
+  console.log("Page view: ", routeName)
   _boxeverq.push(function () {
     const pageViewEvent = {
       browser_id: Boxever.getID(),
@@ -24,15 +25,16 @@ function createPageView(routeName: string) {
 }
 
 interface CdpIntegrationProps {
-  pageEditing: boolean | undefined;
   route: string;
 }
 
 const CdpIntegrationScript = (props: CdpIntegrationProps): JSX.Element => {
-  const clientKey = process.env.PARTNER_SANDBOX_CLIENT_KEY;
+  const clientKey = process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY;
   const targetUrl = 'https://dev-api.boxever.com/v1.2';
 
   useEffect(() => {
+    console.log("Loading up script");
+
     createPageView(props.route);
   });
 
@@ -43,13 +45,7 @@ const CdpIntegrationScript = (props: CdpIntegrationProps): JSX.Element => {
         type="text/javascript"
         dangerouslySetInnerHTML={{
           __html: `
-              var _boxeverq = _boxeverq || [];
-
-              var _boxever_settings = {
-                  client_key: '${clientKey}',
-                  target: '${targetUrl}',
-                  cookie_domain: ''
-              };
+          var _boxeverq = _boxeverq || []; var _boxever_settings = {}; _boxever_settings.client_key="${clientKey}"; _boxever_settings.target="https://api.boxever.com/v1.2"; _boxever_settings.web_flow_target="https://d35vb5cccm4xzp.cloudfront.net";_boxever_settings.cookie_domain="";_boxever_settings.pointOfSale="tworichardsmusicstore";
             `,
         }}
       />
