@@ -6,13 +6,7 @@ import CdpIntegrationScript from '../components/CdpIntegrationScript'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    if(window.Boxever != undefined) {
-      console.log("In Home: " + window.Boxever.getID());
 
-    }
-
-  });
   return (
     <div className={styles.container}>
       <Head>
