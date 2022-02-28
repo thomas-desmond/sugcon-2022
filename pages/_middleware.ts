@@ -38,7 +38,14 @@ async function callFlowsEvent(browserId: string) {
   }
 
   const cdpSegmentsResponseJson = await rawResponse.json();
-  console.log("CDP Response:", cdpSegmentsResponseJson);
+  console.log("CDP Response:", cdpSegmentsResponseJson.audienceFilter);
+  if(cdpSegmentsResponseJson.audienceFilter == 'personalized') {
+    NextResponse.redirect("/personalized")
+  }
+  else
+  {
+    NextResponse.redirect("/homie")
+  }
 }
 
 // endpoint: https://api.boxever.com/v2/callFlows
