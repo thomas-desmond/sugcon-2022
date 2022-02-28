@@ -1,4 +1,5 @@
 import { request } from 'http';
+import { NextURL } from 'next/dist/server/web/next-url';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
@@ -13,7 +14,9 @@ export async function middleware(request: NextRequest) {
   console.log("url: ", request.url)
 
   if (request.url.includes('/home')) {
-    const url = request.nextUrl.clone()
+    const url: NextURL = request.nextUrl.clone()
+    console.log("clonedURL:", url)
+
     url.pathname = '/dest'
 
 
@@ -23,8 +26,10 @@ export async function middleware(request: NextRequest) {
       NextResponse.redirect(url)
     }
     else {
+
       url.pathname = '/home'
-      NextResponse.redirect('/home')
+      console.log("clonedURL new path: ", url)
+      NextResponse.redirect(url)
     }
   }
 
