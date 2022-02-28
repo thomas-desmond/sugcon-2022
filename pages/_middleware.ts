@@ -1,3 +1,4 @@
+import { request } from 'http';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
@@ -7,7 +8,20 @@ export async function middleware(request: NextRequest) {
   if(browserId == '' || undefined) {
     return;
   }
-  await callFlowsEvent(browserId);
+  let callFlowResponse = await callFlowsEvent(browserId);
+
+  console.log("url: ", request.url)
+
+  if(request.url.includes('/home')) {
+    if(callFlowResponse.audienceFilter == 'personalized') {
+      NextResponse.redirect('/home-personalized')
+    }
+    else
+    {
+      NextResponse.redirect('/home')
+    }
+  }
+
 
   return
 }
@@ -39,13 +53,8 @@ async function callFlowsEvent(browserId: string) {
 
   const cdpSegmentsResponseJson = await rawResponse.json();
   console.log("CDP Response:", cdpSegmentsResponseJson.audienceFilter);
-  if(cdpSegmentsResponseJson.audienceFilter == 'personalized') {
-    NextResponse.redirect("sugcon-2022-cyan.vercel.app/personalized")
-  }
-  else
-  {
-    NextResponse.redirect("sugcon-2022-cyan.vercel.app/homie")
-  }
+  return cdpSegmentsResponseJson;
+
 }
 
 // endpoint: https://api.boxever.com/v2/callFlows

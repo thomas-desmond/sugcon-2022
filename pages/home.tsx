@@ -16,9 +16,9 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <CdpIntegrationScript route="my_thomas_page" />
+        <CdpIntegrationScript route="/home" />
         <h1 className={styles.title}>
-          Hi
+          Welcome to <a href="/hi">Next.js!</a>
         </h1>
 
         <p className={styles.description}>
@@ -27,7 +27,7 @@ const Home: NextPage = () => {
         </p>
 
         <div className={styles.grid}>
-          <a href="/home" className={styles.card}>
+          <a href="https://nextjs.org/docs" className={styles.card}>
             <h2>Documentation &rarr;</h2>
             <p>Find in-depth information about Next.js features and API.</p>
           </a>
