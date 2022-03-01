@@ -7,21 +7,34 @@ declare const _boxeverq: any;
 declare const Boxever: any;
 
 function createPageView(routeName: string) {
-  const pos = 'spintel.com';
+  const pos = 'tworichardsmusicstore';
 
   console.log("Page view: ", routeName)
   _boxeverq.push(function () {
     const pageViewEvent = {
       browser_id: Boxever.getID(),
+      browserId: Boxever.getID(),
       channel: 'WEB',
       type: 'VIEW',
       language: 'EN',
       page: routeName,
       pos: pos,
+      email: "thd@sitecore.com",
     };
 
-    Boxever.eventCreate(pageViewEvent, function () {}, 'json');
+    Boxever.eventCreate(pageViewEvent, 
+      function (response: any) {
+        if (!response) {
+          console.log("No response provided.");
+        }
+        if (response.status !== "OK") {
+          console.log("Response status: " + response.status);
+        }
+        console.log(response)
+    }, 'json');
   });
+  console.log("Event in queue");
+
 }
 
 interface CdpIntegrationProps {
@@ -30,7 +43,6 @@ interface CdpIntegrationProps {
 
 const CdpIntegrationScript = (props: CdpIntegrationProps): JSX.Element => {
   const clientKey = process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY;
-  const targetUrl = 'https://dev-api.boxever.com/v1.2';
 
   useEffect(() => {
     console.log("Loading up script");
@@ -45,7 +57,12 @@ const CdpIntegrationScript = (props: CdpIntegrationProps): JSX.Element => {
         type="text/javascript"
         dangerouslySetInnerHTML={{
           __html: `
-          var _boxeverq = _boxeverq || []; var _boxever_settings = {}; _boxever_settings.client_key="${clientKey}"; _boxever_settings.target="https://api.boxever.com/v1.2"; _boxever_settings.web_flow_target="https://d35vb5cccm4xzp.cloudfront.net";_boxever_settings.cookie_domain="";_boxever_settings.pointOfSale="tworichardsmusicstore";
+          var _boxeverq = _boxeverq || []; var _boxever_settings = {}; 
+          
+          _boxever_settings.client_key="${clientKey}"; 
+          _boxever_settings.target="https://api.boxever.com/v1.2"; 
+          _boxever_settings.cookie_domain="";
+          _boxever_settings.pointOfSale="tworichardsmusicstore";
             `,
         }}
       />
