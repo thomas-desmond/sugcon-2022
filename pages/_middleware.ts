@@ -1,11 +1,9 @@
 import { request } from 'http';
 import { NextURL } from 'next/dist/server/web/next-url';
+import { NextMiddlewareResult } from 'next/dist/server/web/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function middleware(request: NextRequest) {
-
-  NextResponse.redirect('https://thetombomb.com/');
-  return;
+export async function middleware(request: NextRequest): Promise<NextMiddlewareResult> {
 
   const cookieKey = `bid_${process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY}`;
   const browserId = request.cookies[cookieKey];
@@ -23,19 +21,17 @@ export async function middleware(request: NextRequest) {
 
     console.log("does it include: ", callFlowResponse.audienceFilter.includes('personalized'))
     if (callFlowResponse.audienceFilter.includes('personalized')) {
-      // url.pathname = '/home-personalized';
-      console.log("Changed1:", url)
-
-      NextResponse.rewrite('https://thetombomb.com/');
+      url.pathname = '/personalized';
+      console.log("Changed1:", url);
+      return NextResponse.redirect(url);
     }
     else {
-
       url.pathname = '/home';
-      console.log("Changed2:", url)
-      NextResponse.redirect(url)
+      console.log("Changed2:", url);
+      return NextResponse.redirect(url);
     }
 
-    NextResponse.redirect('https://thetombomb.com/');
+    return;
 
   }
 }
