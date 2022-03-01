@@ -3,6 +3,10 @@ import { NextURL } from 'next/dist/server/web/next-url';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
+
+  NextResponse.redirect('https://thetombomb.com/');
+  return;
+
   const cookieKey = `bid_${process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY}`;
   const browserId = request.cookies[cookieKey];
   console.log("BrowserId: " + browserId);
@@ -17,24 +21,23 @@ export async function middleware(request: NextRequest) {
     const url: NextURL = request.nextUrl.clone()
     console.log("clonedURL:", url)
 
-    url.pathname = '/dest'
+    console.log("does it include: ", callFlowResponse.audienceFilter.includes('personalized'))
+    if (callFlowResponse.audienceFilter.includes('personalized')) {
+      // url.pathname = '/home-personalized';
+      console.log("Changed1:", url)
 
-
-    if (callFlowResponse.audienceFilter == 'personalized') {
-      url.pathname = '/home-personalized'
-
-      NextResponse.redirect(url)
+      NextResponse.rewrite('https://thetombomb.com/');
     }
     else {
 
-      url.pathname = '/home'
-      console.log("clonedURL new path: ", url)
+      url.pathname = '/home';
+      console.log("Changed2:", url)
       NextResponse.redirect(url)
     }
+
+    NextResponse.redirect('https://thetombomb.com/');
+
   }
-
-
-  return
 }
 
 async function callFlowsEvent(browserId: string) {
@@ -67,18 +70,3 @@ async function callFlowsEvent(browserId: string) {
   return cdpSegmentsResponseJson;
 
 }
-
-// endpoint: https://api.boxever.com/v2/callFlows
-/*
- 
-{
-  "channel": "WEB",
-  "language": "en",
-  "currencyCode": "EUR",
-  "pointOfSale": "eupos",
-  "browserId": "751b53c0-60b2-4da1-baa6-f02ec21a721d",
-  "clientKey": "process.env.PARTNER_SANDBOX_CLIENT_KEY",
-  "friendlyId":"page_view_personalization"
-}
-
-*/
