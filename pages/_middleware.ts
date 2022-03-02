@@ -13,21 +13,11 @@ export async function middleware(request: NextRequest): Promise<NextMiddlewareRe
   }
   let callFlowResponse = await callFlowsEvent(browserId);
 
-  console.log("url: ", request.url)
-
   if (request.url.includes('/home')) {
     const url: NextURL = request.nextUrl.clone()
-    console.log("clonedURL:", url)
 
-    console.log("does it include: ", callFlowResponse.audienceFilter.includes('personalized'))
     if (callFlowResponse.audienceFilter.includes('personalized')) {
       url.pathname = '/personalized';
-      console.log("Changed1:", url);
-      return NextResponse.redirect(url);
-    }
-    else {
-      url.pathname = '/home';
-      console.log("Changed2:", url);
       return NextResponse.redirect(url);
     }
 
