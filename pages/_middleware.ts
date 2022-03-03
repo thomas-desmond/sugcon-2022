@@ -1,12 +1,10 @@
-import { request } from 'http';
 import { NextURL } from 'next/dist/server/web/next-url';
 import { NextMiddlewareResult } from 'next/dist/server/web/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest): Promise<NextMiddlewareResult> {
-
-  const cookieKey = `bid_${process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY}`;
-  const browserId = request.cookies[cookieKey];
+  const cookieKey: string = `bid_${process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY}`;
+  const browserId: string = request.cookies[cookieKey];
   console.log("BrowserId: " + browserId);
   if (browserId == '' || undefined) {
     return;
@@ -22,7 +20,6 @@ export async function middleware(request: NextRequest): Promise<NextMiddlewareRe
     }
 
     return;
-
   }
 }
 
@@ -54,5 +51,4 @@ async function callFlowsEvent(browserId: string) {
   const cdpSegmentsResponseJson = await rawResponse.json();
   console.log("CDP Response:", cdpSegmentsResponseJson.audienceFilter);
   return cdpSegmentsResponseJson;
-
 }
