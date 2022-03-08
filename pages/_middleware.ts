@@ -10,6 +10,6 @@ export async function middleware(request: NextRequest): Promise<NextMiddlewareRe
     console.log("Geo: ", request.geo);
     console.log("IP: ", request.ip);
     console.log("Cookies: ", request.cookies);
-    return NextResponse.redirect(new NextURL("http://www.google.com"));
+    return;
 }
 
