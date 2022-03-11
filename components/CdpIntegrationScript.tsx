@@ -9,7 +9,6 @@ declare const Boxever: any;
 function createPageView(routeName: string) {
   const pos = 'tworichardsmusicstore';
 
-  console.log("Page view: ", routeName)
   _boxeverq.push(function () {
     const pageViewEvent = {
       browser_id: Boxever.getID(),
@@ -22,19 +21,8 @@ function createPageView(routeName: string) {
       email: "thd@sitecore.com",
     };
 
-    Boxever.eventCreate(pageViewEvent, 
-      function (response: any) {
-        if (!response) {
-          console.log("No response provided.");
-        }
-        if (response.status !== "OK") {
-          console.log("Response status: " + response.status);
-        }
-        console.log(response)
-    }, 'json');
+    Boxever.eventCreate(pageViewEvent, function() {}, 'json');
   });
-  console.log("Event in queue");
-
 }
 
 interface CdpIntegrationProps {
@@ -45,8 +33,6 @@ const CdpIntegrationScript = (props: CdpIntegrationProps): JSX.Element => {
   const clientKey = process.env.NEXT_PUBLIC_PARTNER_SANDBOX_CLIENT_KEY;
 
   useEffect(() => {
-    console.log("Loading up script");
-
     createPageView(props.route);
   });
 
